@@ -1,14 +1,19 @@
 const express = require("express");
 const cors = require("cors");
+
+// Routes
 const authRoutes = require("./routes/authRoutes");
+const taskRoutes = require("./routes/taskRoutes");
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
+// Middleware
+app.use(cors()); // Allow cross-origin requests
+app.use(express.json()); // Parse JSON bodies
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/tasks", taskRoutes);
 
 // Health check
 app.get("/api/health", (req, res) => {
