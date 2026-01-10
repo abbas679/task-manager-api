@@ -2,12 +2,29 @@ const Task = require("../models/Task");
 
 // GET /api/tasks - Get all tasks for logged-in user
 const getTasks = async (req, res) => {
-  try {
-    const tasks = await Task.find({ user: req.user._id });
-    res.status(200).json({ success: true, data: tasks });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+  const query = { user: req.user._id };
+
+  if (req.query.completed !== undefined) {
+    query.completed = req.query.completed === "true";
   }
+
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+
+  const sortBy = req.query.sort || "-createdAt";
+
+  const tasks = await Task.find(query).sort(sortBy).skip(skip).limit(limit);
+
+  const total = await Task.countDocuments(query);
+
+  res.json({
+    success: true,
+    page,
+    totalPages: Math.ceil(total / limit),
+    count: tasks.length,
+    data: tasks,
+  });
 };
 
 // POST /api/tasks - Create a new task

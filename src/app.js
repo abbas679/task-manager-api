@@ -20,4 +20,8 @@ app.get("/api/health", (req, res) => {
   res.status(200).json({ success: true, message: "API is running" });
 });
 
+// Error middleware (ALWAYS LAST)
+const errorHandler = require("./middleware/errorMiddleware");
+app.use(errorHandler);
+
 module.exports = app;
