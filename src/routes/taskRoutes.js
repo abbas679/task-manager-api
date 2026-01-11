@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
+
 const protect = require("../middleware/authMiddleware");
 const validateRequest = require("../middleware/validateRequest");
 const { body, param, query } = require("express-validator");
+
 const {
   getTasks,
   createTask,
@@ -10,7 +12,7 @@ const {
   deleteTask,
 } = require("../controllers/taskController");
 
-// GET /api/tasks?completed=true&page=1&limit=10&sort=-createdAt&search=React
+// GET /api/tasks
 router.get(
   "/",
   protect,
@@ -36,8 +38,6 @@ router.get(
   validateRequest,
   getTasks
 );
-
-const { body, param, query } = require("express-validator");
 
 // POST /api/tasks
 router.post(

@@ -1,6 +1,7 @@
 const dotenv = require("dotenv");
 const app = require("./app");
 const connectDB = require("./config/db");
+const { checkDueTasks } = require("./utils/reminder"); // Only once
 
 dotenv.config();
 
@@ -19,3 +20,8 @@ const startServer = async () => {
 };
 
 startServer();
+
+// Run task reminders every hour (checks tasks due in next 1 day)
+setInterval(() => {
+  checkDueTasks(1);
+}, 60 * 60 * 1000);
